@@ -1,5 +1,11 @@
 # ne-sendgrid (Node Engine Sendgrid
 
+## Config
+
+set an environment variable with the api key. 
+
+process.env.SENDGRID_APIKEY: "yourapikey"
+
 
 ## Default use
 
