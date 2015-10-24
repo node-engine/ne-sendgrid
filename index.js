@@ -1,153 +1,85 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var neData = require('ne-data');
+'use strict';
 
-var modelSchema = new Schema({
-    to:{type: String},
-    from:{type: String},
-    subject:{type: String},
-    body:{type: String},
-    detail:{
-        phone: {type: String},
-        name: {type: String}
-    },
-    status: {
-        date: {type: String},
-        message: {type: String}
-    },
-    createdAt:{type: String, required: true, default: new Date()}
-});
+var sendgrid = require('sendgrid')(process.env.SENDGRID_APIKEY);
+var axios = require('axios');
 
-var dataRef = {
-    "name": "nesendgrid",
-    "slug": "/admin/nesendgrid",
-    "apiSlug": "/data/nesendgrid",
-    "interfaceType": "default",
-    "cycleByDefault": false,
-    "batchSize": 10,
-    "type": "noEdit",
-    "categories": [],
-    "tags": [],
-    "fields": [
-        {
-            name: "p1",
-            data: "to",
-            type: "noEdit"
-        },
-        {
-            name: "p2",
-            data: "from",
-            type: "noEdit"
-        },
-        {
-            name: "p3",
-            data: "subject",
-            type: "noEdit"
-        },
-        {
-            name: "p4",
-            data: "body",
-            type: "noEdit"
-        },
-        {
-            name: "p4",
-            data: "detail.name",
-            type: "noEdit"
-        },
-        {
-            name: "p5",
-            data: "detail.phone",
-            type: "noEdit"
-        },
-        {
-            name: "p6",
-            data: "status.message",
-            type: "noEdit"
-        },
-        {
-            name: "p7",
-            data: "status.date",
-            type: "noEdit"
-        }
-    ]
+var neSendgrid = {
+
+    sendText: function (email, res) {
+
+        var self = this;
+
+        sendgrid.send({
+            to: email.to,
+            from: email.from,
+            subject: email.subject,
+            text: email.body
+        }, function (err, status) {
+            if (err) {
+                var error = err;
+                console.log(error);
+                var status = {};
+                status.message = error;
+                status.date = new Date();
+                email.status = status;
+                if(email.save === true){
+                    return self.saveEmail(email, res);
+                }
+            } else {
+                console.log(status);
+                status.date = new Date();
+                email.status = status;
+                return self.saveEmail(email, res);
+            }
+        });
+    },
+    sendHTML: function (email, res) {
+
+        var self = this;
+        console.log('neSendgrid: Sending email');
+
+        sendgrid.send({
+            to: email.to,
+            from: email.from,
+            subject: email.subject,
+            html: email.body
+        }, function (err, status) {
+            if (err) {
+                var error = err;
+                console.log('neSendgrid: Error sending email');
+                console.log(error);
+                var status = {};
+                status.message = error;
+                status.date = new Date();
+                email.status = status;
+                if(email.save === true){
+                    return self.saveEmail(email, res);
+                }
+            } else {
+                console.log('neSendgrid: Email sent');
+                console.log(status);
+                status.date = new Date();
+                email.status = status;
+                self.saveEmail(email, res);
+            }
+        });
+    },
+
+    saveEmail: function (email, res) {
+        console.log('neSendgrid: Saving email');
+        var dataPath = process.env.ROOTURL + '/data/nesendgrid'; // + "?token=" + req.cookies.token;
+        var postObject = email;
+
+        axios.post(dataPath, postObject).then(function (response) {
+            var redirectPath = "/contact" + "?message=Message sent";
+            console.log('neSendgrid: Email saved');
+            return res.redirect(redirectPath);
+        })['catch'](function (response) {
+            var redirectPath = "/contact" + "?message=Message failed to send";
+            console.log('neSendgrid: Error saving email');
+            return res.redirect(redirectPath);
+        });
+    }
 };
 
-
-/*
-
- Later in the handler you just call a function similar to this
- {self.props.nerb1 && self.props.nerb1.testField && neHandler(self.props.nerb1.testField)}
-
- or
-
- {neHandler(self.props, {field: "nerb1.testField", otherOption: "something"})}
-
- and the app will place the javascript version of that there no need to then transpile the jsx
-
- also in the handler you need to say wheter it is a map or wheter just one object is expected back
-
- {neHandler(self.props, {field: "nerb1.testField", map: true})}
-
- */
-
-var Model = mongoose.model(
-    'nesendgrid',
-    modelSchema,
-    'nesendgrid'
-);
-
-var routes = function (router){
-
-    var permissionsArray = ['admin'];
-
-    neData.get(router, Model);
-    neData.putWithPermissions(router, Model, permissionsArray);
-    neData.post(router, Model);
-    neData.deleteWithPermissions(router, Model, permissionsArray);
-
-};
-
-exports.routes = routes;
-exports.dataRef = dataRef;
-
-
-/*
-
-
- Map in the handler and return components.
-
- Pass the data to the component
- var neHandler = require('ne-handler')
-
-
- this.props.nerb1.map(function(item, index){
-
- <neHandler.textBox1 {...this.props}/>
-
- })
-
- --------
-
- var renderer = function (dataObject, {
- renderType: "dp",
- dClass: "class-name-of-div",
- dIndex: "id-name-of-div",
- dKey: "key-of-div",
- pText: "description",
- })
-
- var renderer = function (dataObject, optionsObject){
-
- If (dataObject.renderType === dp){
- return (
- <div key={dataObject.dKey} className={dataObject.dClass} id={dataObject.dId}>
- <p> {dataObject[pText]}</p>
- </div>
- )
- }
-
- }
-
- -----
-
- */
+module.exports = neSendgrid;
