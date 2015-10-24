@@ -58,6 +58,16 @@ var dataRef = {
             name: "p5",
             data: "detail.phone",
             type: "noEdit"
+        },
+        {
+            name: "p6",
+            data: "status.message",
+            type: "noEdit"
+        },
+        {
+            name: "p7",
+            data: "status.date",
+            type: "noEdit"
         }
     ]
 };
@@ -82,7 +92,8 @@ var dataRef = {
 
 var Model = mongoose.model(
     'nesendgrid',
-    modelSchema
+    modelSchema,
+    'nesendgrid'
 );
 
 var routes = function (router){
