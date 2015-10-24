@@ -5,6 +5,12 @@ var router = express.Router();
 
 var neSendgridContactFormRoute = function (server){
 
+    router.get('/tt', function(req, res, next){
+
+        res.send('Something')
+
+    });
+
     router.post('/inbound', function(req, res, next){
 
         console.log(" ");
@@ -18,6 +24,8 @@ var neSendgridContactFormRoute = function (server){
 
         emailObject.to = process.env.EMAIL;
         emailObject.subject = "Email from " + process.env.APPNAME;
+        emailObject.detail = {};
+
 
         Object.getOwnPropertyNames(req.body).forEach(function (item, index, array) {
 
@@ -39,7 +47,7 @@ var neSendgridContactFormRoute = function (server){
                 console.log(item);
                 emailObject[item] = req.body[item]
             }
-            else if (item === "content"){
+            else if (item === "body"){
                 console.log('neSendgrid Routes: set content');
                 console.log(item);
                 emailObject[item] = req.body[item]
@@ -56,21 +64,24 @@ var neSendgridContactFormRoute = function (server){
 
         });
 
-        neSendgrid.sendText(emailObject);
+        console.log('neSendgrid Routes: emailObject');
+        return neSendgrid.sendText(emailObject, res);
+
+
 
         /*
-        neSendgrid.sendText({
-            to: "name@mail.com",
-            from: "name@mail.com",
-            subject: "This is the subject 2",
-            body: "This is the body 2"s
-        });
+         neSendgrid.sendText({
+         to: "name@mail.com",
+         from: "name@mail.com",
+         subject: "This is the subject 2",
+         body: "This is the body 2"s
+         });
 
          to:{type: String},
          from:{type: String},
          subject:{type: String},
          body:{type: String},
-        */
+         */
 
     });
 

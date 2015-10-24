@@ -74,7 +74,7 @@ var neSendgrid = {
 
         console.log('neSendgrid: Saving email');
 
-        var dataPath = process.env.ROOTURL + '/data/nesendgrid' + "?token=" + req.cookies.token;
+        var dataPath = process.env.ROOTURL + '/data/nesendgrid'// + "?token=" + req.cookies.token;
         var postObject = email;
 
         axios.post(dataPath, postObject).then(function (response) {
