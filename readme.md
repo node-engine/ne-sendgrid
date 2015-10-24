@@ -3,6 +3,8 @@
 
 ## Default use
 
+```js
+
 neSendgrid = require('ne-sendgrid')
 
 neSendgrid.sendText({
@@ -20,6 +22,8 @@ neSendgrid.sendHTML({
     subject: "This is the subject line",
     body: "<h1>heading</h1><p>paragraph of text</p>"
 })
+
+```
 
 
 ## Contact form
