@@ -11,7 +11,7 @@ process.env.SENDGRID_APIKEY: "yourapikey"
 
 ```js
 
-neSendgrid = require('ne-sendgrid')
+var neSendgrid = require('ne-sendgrid')
 
 neSendgrid.sendText({
     to: "name@mail.com",
@@ -27,6 +27,26 @@ neSendgrid.sendHTML({
     from: "name@mail.com",
     subject: "This is the subject line",
     body: "<h1>heading</h1><p>paragraph of text</p>"
+})
+
+// or 
+
+neSendgrid.sendText({
+    to: "name@mail.com",
+    from: "name@mail.com",
+    subject: "This is the subject line",
+    body: "This is the body 2",
+    save: true
+})
+
+// or
+
+neSendgrid.sendHTML({
+    to: "name@mail.com",
+    from: "name@mail.com",
+    subject: "This is the subject line",
+    body: "<h1>heading</h1><p>paragraph of text</p>",
+    save: true
 })
 
 ```
