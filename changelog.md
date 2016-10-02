@@ -22,6 +22,21 @@ Dependencies
 - DU Update Dependency: A dependency is updated in the package
 
 
+## 1.0.6
+
+Release date:
+
+[DR] Removed the safe to database directly function. This is to be replaced with a api call to the part of the app that controls the database.
+
+
+## 1.0.5
+
+Release date: NOT released
+
+[BF] /ne-data/nesendgrid.js
+- Fixed the labels
+
+
 ## 1.0.4
 
 Release date: 20151023

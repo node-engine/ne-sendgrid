@@ -2,10 +2,11 @@
 
 ## Config
 
-set an environment variable with the api key. 
+set an environment variable with the api key appname and default email. 
 
-process.env.SENDGRID_APIKEY: "yourapikey"
-
+- process.env.SENDGRID_APIKEY: "yourapikey"
+- process.env.APPNAME: "your app name"
+- process.env.EMAIL: "thedefault@email.address"
 
 ## Default use
 
@@ -66,7 +67,6 @@ Simple example with only required fields
 ```js
 
 <form action="/emails/sendgrid/inbound" method="post">
-    <input type="text" name="to"></input>
     <input type="text" name="from"></input>
     <input type="text" name="subject"></input>
     <input type="text" name="body"></input>
