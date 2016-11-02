@@ -22,11 +22,16 @@ var neSendgrid = {
                 status.message = error;
                 status.date = new Date();
                 email.status = status;
+                var redirectPath = "/contact" + "?message=Message failed to send";
+                console.log('neSendgrid: Error sending email');
+                return res.redirect(redirectPath);
             } else {
                 console.log(status);
                 status.date = new Date();
                 email.status = status;
-                return email
+                var redirectPath = "/contact" + "?message=Message sent";
+                console.log('neSendgrid: Email saved');
+                return res.redirect(redirectPath);
             }
         });
     },

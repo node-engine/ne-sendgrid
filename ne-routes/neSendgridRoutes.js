@@ -5,12 +5,6 @@ var router = express.Router();
 
 var neSendgridContactFormRoute = function (server){
 
-    router.get('/tt', function(req, res, next){
-
-        res.send('Something')
-
-    });
-
     router.post('/inbound', function(req, res, next){
 
         console.log(" ");
@@ -24,50 +18,47 @@ var neSendgridContactFormRoute = function (server){
 
         emailObject.to = process.env.EMAIL;
         emailObject.subject = "Email from " + process.env.APPNAME;
-        emailObject.detail = {};
-
+        emailObject.from = req.body.from;
 
         Object.getOwnPropertyNames(req.body).forEach(function (item, index, array) {
 
             console.log('neSendgrid Routes: item');
             console.log(item);
+            emailObject.body = emailObject.body + " " + req.body[item];
 
-            if (item === "to"){
-                console.log('neSendgrid Routes: set to');
-                console.log(item);
-                emailObject[item] = req.body[item]
-            }
-            else if (item === "from"){
-                console.log('neSendgrid Routes: set from');
-                console.log(item);
-                emailObject[item] = req.body[item]
-            }
-            else if (item === "subject"){
-                console.log('neSendgrid Routes: set subject');
-                console.log(item);
-                emailObject[item] = req.body[item]
-            }
-            else if (item === "body"){
-                console.log('neSendgrid Routes: set content');
-                console.log(item);
-                emailObject[item] = req.body[item]
-            }
-            else if (item === "phone"){
-                emailObject.detail.phone = req.body[item]
-            }
-            else if (item === "name"){
-                emailObject.detail.name = req.body[item]
-            }
-            else{
-                console.log("neSendgrid Routes Inbound: Skipped " + item + " on purpose becuase its not part of sendgrid email schema")
-            }
-
+            /*
+             if (item == "from"){
+             console.log('neSendgrid Routes: set from');
+             console.log(item);
+             emailObject[item] = req.body[item];
+             console.log(emailObject);
+             }
+             else if (item == "content"){
+             console.log('neSendgrid Routes: set content');
+             console.log(item);
+             emailObject.content.content = req.body[item];
+             console.log(emailObject);
+             }
+             else if (item == "phone"){
+             emailObject.content.phone = req.body[item];
+             console.log(emailObject);
+             }
+             else if (item == "name"){
+             emailObject.content.name = req.body[item];
+             console.log(emailObject);
+             }
+             else{
+             console.log("neSendgrid Routes Inbound: Skipped " + item + " on purpose becuase its not part of sendgrid email schema")
+             }
+             */
         });
 
-        console.log('neSendgrid Routes: emailObject');
-        return neSendgrid.sendText(emailObject, res);
+        console.log("emailObject before call to neSendgrid");
+        console.log(emailObject);
 
+        neSendgrid.sendText(emailObject, res);
 
+        // res.redirect('/');
 
         /*
          neSendgrid.sendText({
