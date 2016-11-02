@@ -1,7 +1,7 @@
 'use strict';
 
 var sendgrid = require('sendgrid')(process.env.SENDGRID_APIKEY);
-var axios = require('axios');
+// var axios = require('axios');
 
 var neSendgrid = {
 
@@ -22,14 +22,11 @@ var neSendgrid = {
                 status.message = error;
                 status.date = new Date();
                 email.status = status;
-                if(email.save === true){
-                    return self.saveEmail(email, res);
-                }
             } else {
                 console.log(status);
                 status.date = new Date();
                 email.status = status;
-                return self.saveEmail(email, res);
+                return email
             }
         });
     },
@@ -65,6 +62,7 @@ var neSendgrid = {
         });
     },
 
+    /*
     saveEmail: function (email, res) {
         console.log('neSendgrid: Saving email');
         var dataPath = process.env.ROOTURL + '/data/nesendgrid'; // + "?token=" + req.cookies.token;
@@ -80,6 +78,7 @@ var neSendgrid = {
             return res.redirect(redirectPath);
         });
     }
+    */
 };
 
 module.exports = neSendgrid;

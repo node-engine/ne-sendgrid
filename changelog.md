@@ -21,6 +21,12 @@ Dependencies
 - DR Remove Dependency: A  dependency is removed from the package
 - DU Update Dependency: A dependency is updated in the package
 
+## 1.1.0
+
+Release date:
+
+[DR] Removed what was left of the database save functions and updated the version number properly
+
 
 ## 1.0.6
 
