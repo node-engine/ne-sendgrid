@@ -22,7 +22,21 @@ Dependencies
 - DU Update Dependency: A dependency is updated in the package
 
 
-## 1.1.2
+## 1.1.5
+
+Release date:
+
+[BF]
+
+
+## 1.1.4
+
+Release date:
+
+[BF]
+
+
+## 1.1.3
 
 Release date:
 
@@ -34,7 +48,6 @@ Release date:
 Release date:
 
 [BF]
-
 
 
 ## 1.1.0

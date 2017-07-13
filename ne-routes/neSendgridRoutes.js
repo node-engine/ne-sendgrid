@@ -17,8 +17,8 @@ var neSendgridContactFormRoute = function (server){
         var emailObject = {};
 
         emailObject.to = process.env.EMAIL;
+        emailObject.from = process.env.EMAIL;
         emailObject.subject = "Email from " + process.env.APPNAME;
-        emailObject.from = req.body.from;
 
         Object.getOwnPropertyNames(req.body).forEach(function (item, index, array) {
 
@@ -73,6 +73,36 @@ var neSendgridContactFormRoute = function (server){
          subject:{type: String},
          body:{type: String},
          */
+
+    });
+
+    router.post('/custom-text', function(req, res, next){
+
+        console.log(" ");
+        console.log(" ");
+        console.log("routes/contactForm req.body");
+        console.log(req.body);
+        console.log(" ");
+        console.log(" ");
+
+        var emailObject = {};
+
+        emailObject.to = process.env.EMAIL;
+        emailObject.from = process.env.EMAIL;
+        emailObject.subject = "Email from " + process.env.APPNAME;
+
+        Object.getOwnPropertyNames(req.body).forEach(function (item, index, array) {
+
+            console.log('neSendgrid Routes: item');
+            console.log(item);
+            emailObject.body = emailObject.body + " " +  req.body[item];
+
+        });
+
+        console.log("emailObject before call to neSendgrid");
+        console.log(emailObject);
+
+        neSendgrid.sendText(emailObject, res);
 
     });
 

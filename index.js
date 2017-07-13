@@ -35,6 +35,7 @@ var neSendgrid = {
             }
         });
     },
+
     sendHTML: function (email, res) {
 
         var self = this;
@@ -48,24 +49,24 @@ var neSendgrid = {
         }, function (err, status) {
             if (err) {
                 var error = err;
-                console.log('neSendgrid: Error sending email');
                 console.log(error);
                 var status = {};
                 status.message = error;
                 status.date = new Date();
                 email.status = status;
-                if(email.save === true){
-                    return self.saveEmail(email, res);
-                }
+                var redirectPath = "/contact" + "?message=Message failed to send";
+                console.log('neSendgrid: Error sending email');
+                return res.redirect(redirectPath);
             } else {
-                console.log('neSendgrid: Email sent');
                 console.log(status);
                 status.date = new Date();
                 email.status = status;
-                self.saveEmail(email, res);
+                var redirectPath = "/contact" + "?message=Message sent";
+                console.log('neSendgrid: Email saved');
+                return res.redirect(redirectPath);
             }
         });
-    },
+    }
 
     /*
     saveEmail: function (email, res) {
